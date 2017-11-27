@@ -1,6 +1,6 @@
 {
     "name": "papamonkey/payum-wepay",
-    "type": "project",
+    "type": "package",
     "description": "payum wepay extension",
     "keywords": ["payment wepay"],
     "homepage": "http://payum.org",
@@ -12,6 +12,7 @@
         }
     ],
     "require": {
+        "php": ">=5.6.0",
         "payum/core": "^1.3",
         "overtrue/laravel-wechat": "^3.1"
     },
