@@ -1,5 +1,5 @@
 {
-    "name": "papamk/payum-wepay",
+    "name": "papamonkey/payum-wepay",
     "type": "project",
     "description": "payum wepay extension",
     "keywords": ["payment wepay"],

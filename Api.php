@@ -1,5 +1,5 @@
 <?php
-namespace Papamk\PayumWepay;
+namespace Papamonkey\PayumWepay;
 
 use Http\Message\MessageFactory;
 use Payum\Core\Exception\Http\HttpException;

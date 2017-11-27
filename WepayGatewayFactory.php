@@ -1,13 +1,13 @@
 <?php
-namespace Papamk\PayumWepay;
+namespace Papamonkey\PayumWepay;
 
-use Papamk\PayumWepay\Action\AuthorizeAction;
-use Papamk\PayumWepay\Action\CancelAction;
-use Papamk\PayumWepay\Action\ConvertPaymentAction;
-use Papamk\PayumWepay\Action\CaptureAction;
-use Papamk\PayumWepay\Action\NotifyAction;
-use Papamk\PayumWepay\Action\RefundAction;
-use Papamk\PayumWepay\Action\StatusAction;
+use Papamonkey\PayumWepay\Action\AuthorizeAction;
+use Papamonkey\PayumWepay\Action\CancelAction;
+use Papamonkey\PayumWepay\Action\ConvertPaymentAction;
+use Papamonkey\PayumWepay\Action\CaptureAction;
+use Papamonkey\PayumWepay\Action\NotifyAction;
+use Papamonkey\PayumWepay\Action\RefundAction;
+use Papamonkey\PayumWepay\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 

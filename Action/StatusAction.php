@@ -1,5 +1,5 @@
 <?php
-namespace Papamk\PayumWepay\Action;
+namespace Papamonkey\PayumWepay\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\GetStatusInterface;
