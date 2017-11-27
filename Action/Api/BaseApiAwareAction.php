@@ -1,12 +1,12 @@
 <?php
-namespace Payum\Skeleton\Action\Api;
+namespace Papamk\PayumWepay\Action\Api;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
-use Payum\Skeleton\Api;
+use Papamk\PayumWepay\Api;
 
 abstract class BaseApiAwareAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {

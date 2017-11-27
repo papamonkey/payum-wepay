@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Skeleton\Action;
+namespace Papamk\PayumWepay\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;

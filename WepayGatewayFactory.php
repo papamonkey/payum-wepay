@@ -1,17 +1,17 @@
 <?php
-namespace Payum\Skeleton;
+namespace Papamk\PayumWepay;
 
-use Payum\Skeleton\Action\AuthorizeAction;
-use Payum\Skeleton\Action\CancelAction;
-use Payum\Skeleton\Action\ConvertPaymentAction;
-use Payum\Skeleton\Action\CaptureAction;
-use Payum\Skeleton\Action\NotifyAction;
-use Payum\Skeleton\Action\RefundAction;
-use Payum\Skeleton\Action\StatusAction;
+use Papamk\PayumWepay\Action\AuthorizeAction;
+use Papamk\PayumWepay\Action\CancelAction;
+use Papamk\PayumWepay\Action\ConvertPaymentAction;
+use Papamk\PayumWepay\Action\CaptureAction;
+use Papamk\PayumWepay\Action\NotifyAction;
+use Papamk\PayumWepay\Action\RefundAction;
+use Papamk\PayumWepay\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 
-class SkeletonGatewayFactory extends GatewayFactory
+class WepayGatewayFactory extends GatewayFactory
 {
     /**
      * {@inheritDoc}
@@ -32,7 +32,7 @@ class SkeletonGatewayFactory extends GatewayFactory
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
-                'sandbox' => true,
+                'sandbox' => false, // wepay not support sandbox
             );
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = [];
