@@ -8,6 +8,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 
 class StatusAction implements ActionInterface
 {
+    const FIELD_STATUS = "status";
     /**
      * {@inheritDoc}
      *
@@ -19,7 +20,22 @@ class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        if (false == $model[static::FIELD_STATUS]) {
+            $request->markNew();
+            return;
+        }
+        if (static::STATUS_CAPTURED == $model[static::FIELD_STATUS]) {
+            $request->markCaptured();
+
+            return;
+        }
+
+        if (static::STATUS_CANCELED == $model[static::FIELD_STATUS]) {
+            $request->markCanceled();
+
+            return;
+        }
+        $request->markUnknown();
     }
 
     /**
