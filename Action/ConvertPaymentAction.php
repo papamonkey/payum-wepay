@@ -49,16 +49,15 @@ class ConvertPaymentAction implements ActionInterface, ApiAwareInterface
                 'body' => $payment->getNumber(),
                 'detail' => $payment->getDescription(),
                 'out_trade_no' => $payment->getNumber() . mt_rand(1000, 9999),
-                'total_fee' => $payment->getTotalAmount(),
+                'total_fee' => 100, //TODO: change to official, $payment->getTotalAmount(), 
                 'openid' => 'oCy7r0MUXbwcY4ncNQZwTwOk_qAU'
             ]));
 
             $result = $this->api->doPrepare((array)$details);
-            if ($result->return_code != 'SUCCESS') {
-                 throw new BadRequestHttpException($result->return_msg); 
-            }
-            $details['prepay_id'] = $result->prepay_id;
-        } else {
+            $details['config'] = $result;
+
+		} else {
+        throw new \LogicException('Not implemented');
             $details = $oldDetails;
         }
         $request->setResult((array) $details); //throw new \LogicException('Not implemented');

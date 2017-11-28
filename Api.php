@@ -7,6 +7,7 @@ use Payum\Core\HttpClientInterface;
 use EasyWeChat\Foundation\Application;
 use EasyWeChat\Payment\Order;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Api
 {
@@ -88,8 +89,15 @@ class Api
     public function doPrepare(array $fields)                                              
     {   
         $order = new Order($fields);
-        $result = $this->wechatApp->payment->prepare($order);
-        return $result;
+        $payment = $this->wechatApp->payment;
+        $result = $payment->prepare($order);
+        if ($result->return_code != 'SUCCESS') {
+             throw new BadRequestHttpException($result->return_msg); 
+        }
+        $config = $payment->configForJSSDKPayment($result->prepay_id);
+        $config['timeStamp'] = $config['timestamp'];
+        unset($config['timestamp']);
+        return $config;
     }    
 
     public function doNotify(array $fields)
