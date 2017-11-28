@@ -92,6 +92,23 @@ class Api
         return $result;
     }    
 
+    public function doNotify(array $fields)
+	{
+        $payment = $this->wechatApp->payment;
+		$response = $payment->handleNotify(function($notify, $successful) use($payment) {
+			//支付失败情况下，将Order的payment_status重置为ready，并发送模板通知给客户
+			if ($notify->return_code != 'SUCCESS') {
+				return true;
+			}
+			$queryResult = $payment->query($notify->out_trade_no);
+			if ($queryResult->return_code != 'SUCCESS')
+				return "no such order named " . $notify->out_trade_no;
+
+			return true; // 或者错误消息
+        });
+		return $response;
+
+	}
     /**
      * @param array $fields
      *

@@ -9,6 +9,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 class StatusAction implements ActionInterface
 {
     const FIELD_STATUS = "status";
+
     /**
      * {@inheritDoc}
      *
@@ -16,6 +17,7 @@ class StatusAction implements ActionInterface
      */
     public function execute($request)
     {
+        global $kernel;
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
@@ -35,6 +37,9 @@ class StatusAction implements ActionInterface
 
             return;
         }
+
+        $logger = $kernel->getContainer()->get('logger');
+        $logger->info("on execute status" . json_encode((array)$model));
         $request->markUnknown();
     }
 

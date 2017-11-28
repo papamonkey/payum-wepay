@@ -44,15 +44,14 @@ class ConvertPaymentAction implements ActionInterface, ApiAwareInterface
         if (!$oldDetails['prepay_id'] ) {
             $logger = $kernel->getContainer()->get('logger');
             $logger->info("on prepare");
-            $details = ArrayObject::ensureArrayObject([
+            $details = ArrayObject::ensureArrayObject(array_merge((array)$oldDetails, [
                 'trade_type' => 'JSAPI',
                 'body' => $payment->getNumber(),
                 'detail' => $payment->getDescription(),
-                'out_trade_no' => $payment->getNumber() . '123',
+                'out_trade_no' => $payment->getNumber() . mt_rand(1000, 9999),
                 'total_fee' => $payment->getTotalAmount(),
-                'notify_url' => '/wxpay',
                 'openid' => 'oCy7r0MUXbwcY4ncNQZwTwOk_qAU'
-            ]);
+            ]));
 
             $result = $this->api->doPrepare((array)$details);
             if ($result->return_code != 'SUCCESS') {

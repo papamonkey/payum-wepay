@@ -6,10 +6,19 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Notify;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
+use Papamonkey\PayumWepay\Api;
 
-class NotifyAction implements ActionInterface
+class NotifyAction implements ActionInterface, ApiAwareInterface
 {
+    use ApiAwareTrait;
     use GatewayAwareTrait;
+
+    public function __construct()
+    {
+        $this->apiClass = Api::class;
+    }
 
     /**
      * {@inheritDoc}
@@ -22,7 +31,8 @@ class NotifyAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        $result = $this->api->doNotify((array)$model);
+        $request->setModel($result);
     }
 
     /**
