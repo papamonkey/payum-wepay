@@ -41,11 +41,11 @@ class ConvertPaymentAction implements ActionInterface, ApiAwareInterface
         /* $order = $payment->getOrder(); */    
 
         $oldDetails = ArrayObject::ensureArrayObject($payment->getDetails());
-        if (!$oldDetails['prepay_id'] ) {
+        /* if (!$oldDetails['prepay_id'] ) { */
             $logger = $kernel->getContainer()->get('logger');
             $logger->info("on prepare");
             $details = ArrayObject::ensureArrayObject(array_merge((array)$oldDetails, [
-                'trade_type' => 'JSAPI',
+                //'trade_type' => 'JSAPI',
                 'body' => $payment->getNumber(),
                 'detail' => $payment->getDescription(),
                 'out_trade_no' => $payment->getNumber() . mt_rand(1000, 9999),
@@ -55,11 +55,10 @@ class ConvertPaymentAction implements ActionInterface, ApiAwareInterface
 
             $result = $this->api->doPrepare((array)$details);
             $details['config'] = $result;
-
-		} else {
-        throw new \LogicException('Not implemented');
-            $details = $oldDetails;
-        }
+            $details['status'] = 'processing';
+		/* } else { */
+            /* $details = $oldDetails; */
+        /* } */
         $request->setResult((array) $details); //throw new \LogicException('Not implemented');
     }
 

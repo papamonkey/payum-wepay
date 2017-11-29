@@ -47,7 +47,8 @@ class Api
         $options->validateNotEmpty([
             'app_id',
             'merchant_id',
-            'key'
+            'key',
+            'type'
         ]);
         $this->options = $options;
         $this->client = $client;
@@ -88,20 +89,32 @@ class Api
      */ 
     public function doPrepare(array $fields)                                              
     {   
+        if (!isset($fields['trade_type']))
+            $fields['trade_type'] = $this->options['type'];
         $order = new Order($fields);
         $payment = $this->wechatApp->payment;
         $result = $payment->prepare($order);
         if ($result->return_code != 'SUCCESS') {
              throw new BadRequestHttpException($result->return_msg); 
         }
-        $config = $payment->configForJSSDKPayment($result->prepay_id);
+        switch ($fields['trade_type']) {
+            case 'JSAPI':
+                $config = $payment->configForJSSDKPayment($result->prepay_id);
+                break;
+            case 'APP':
+                $config = $payment->configForAppPayment($result->prepay_id);
+                break;
+            default:
+                throw  new \InvalidArgumentException("trade_type:{$fields['trade_type']} unsupported");
+        }
+
         $config['timeStamp'] = $config['timestamp'];
         unset($config['timestamp']);
         return $config;
     }    
 
-    public function doNotify(array $fields)
-	{
+    public function doNotify(\Closure $callback)
+    {
         $payment = $this->wechatApp->payment;
 		$response = $payment->handleNotify(function($notify, $successful) use($payment) {
 			//支付失败情况下，将Order的payment_status重置为ready，并发送模板通知给客户
@@ -112,15 +125,20 @@ class Api
 			if ($queryResult->return_code != 'SUCCESS')
 				return "no such order named " . $notify->out_trade_no;
 
+            // 订单存在并且支付成功
+            if (is_callable($callback)) {
+                $callback();
+            }
 			return true; // 或者错误消息
         });
-		return $response;
+        return $response;
+    }
 
-	}
     /**
      * @param array $fields
      *
      * @return array
+     * @unused
      */
     protected function doRequest($method, array $fields)
     {
@@ -139,6 +157,7 @@ class Api
 
     /**
      * @return string
+     * @unused
      */
     protected function getApiEndpoint()
     {

@@ -26,20 +26,22 @@ class StatusAction implements ActionInterface
             $request->markNew();
             return;
         }
-        if (static::STATUS_CAPTURED == $model[static::FIELD_STATUS]) {
+
+        if ('processing' == $model[static::FIELD_STATUS]) {
+            $request->markPending();
+            return;
+        }
+
+        if ('completed' == $model[static::FIELD_STATUS]) {
             $request->markCaptured();
-
             return;
         }
 
-        if (static::STATUS_CANCELED == $model[static::FIELD_STATUS]) {
-            $request->markCanceled();
-
+        if ('refunded' == $model[static::FIELD_STATUS]) {
+            $request->markRefunded();
             return;
         }
 
-        $logger = $kernel->getContainer()->get('logger');
-        $logger->info("on execute status" . json_encode((array)$model));
         $request->markUnknown();
     }
 

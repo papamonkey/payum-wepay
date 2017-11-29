@@ -29,6 +29,9 @@ class WepayGatewayFactory extends GatewayFactory
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
         ]);
+        $prepends = $config['payum.prepend_actions'];
+        $prepends[] = 'payum.action.notify';
+        $config['payum.prepend_actions'] = $prepends;
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(

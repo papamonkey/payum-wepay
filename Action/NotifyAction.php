@@ -9,6 +9,7 @@ use Payum\Core\Request\Notify;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Papamonkey\PayumWepay\Api;
+use Payum\Core\Model\PaymentInterface;
 
 class NotifyAction implements ActionInterface, ApiAwareInterface
 {
@@ -29,10 +30,16 @@ class NotifyAction implements ActionInterface, ApiAwareInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        /* $details = ArrayObject::ensureArrayObject($request->getModel()); */
 
-        $result = $this->api->doNotify((array)$model);
-        $request->setModel($result);
+        $result = [];
+        $response = $this->api->doNotify(function() use (&$request, &$result, $kernel){
+            $payment = $request->getModel();
+            $details = ArrayObject::ensureArrayObject($payment->getDetails());
+            $details['status'] = 'completed';
+            $payment->setDetails($details);
+        });
+        $request->setModel($response);
     }
 
     /**
@@ -41,8 +48,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface
     public function supports($request)
     {
         return
-            $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayAccess
+            $request instanceof Notify 
         ;
     }
 }
