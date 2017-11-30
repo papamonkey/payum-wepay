@@ -49,13 +49,12 @@ class ConvertPaymentAction implements ActionInterface, ApiAwareInterface
                 'body' => $payment->getNumber(),
                 'detail' => $payment->getDescription(),
                 'out_trade_no' => $payment->getNumber() . mt_rand(1000, 9999),
-                'total_fee' => 100, //TODO: change to official, $payment->getTotalAmount(), 
-                'openid' => 'oCy7r0MUXbwcY4ncNQZwTwOk_qAU'
+                'total_fee' => $payment->getTotalAmount(), 
             ]));
 
             $result = $this->api->doPrepare((array)$details);
             $details['config'] = $result;
-            $details['status'] = 'processing';
+            /* $details['status'] = 'processing'; */
 		/* } else { */
             /* $details = $oldDetails; */
         /* } */
