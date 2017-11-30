@@ -116,7 +116,7 @@ class Api
     public function doNotify(\Closure $callback)
     {
         $payment = $this->wechatApp->payment;
-		$response = $payment->handleNotify(function($notify, $successful) use($payment) {
+		$response = $payment->handleNotify(function($notify, $successful) use($payment, $callback) {
 			//支付失败情况下，将Order的payment_status重置为ready，并发送模板通知给客户
 			if ($notify->return_code != 'SUCCESS') {
 				return true;
