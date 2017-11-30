@@ -33,7 +33,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface
         /* $details = ArrayObject::ensureArrayObject($request->getModel()); */
 
         $result = [];
-        $response = $this->api->doNotify(function() use (&$request, &$result, $kernel){
+        $response = $this->api->doNotify(function() use (&$request, &$result){
             $payment = $request->getModel();
             $details = ArrayObject::ensureArrayObject($payment->getDetails());
             $details['status'] = 'completed';

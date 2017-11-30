@@ -41,23 +41,16 @@ class ConvertPaymentAction implements ActionInterface, ApiAwareInterface
         /* $order = $payment->getOrder(); */    
 
         $oldDetails = ArrayObject::ensureArrayObject($payment->getDetails());
-        /* if (!$oldDetails['prepay_id'] ) { */
-            $logger = $kernel->getContainer()->get('logger');
-            $logger->info("on prepare");
-            $details = ArrayObject::ensureArrayObject(array_merge((array)$oldDetails, [
-                //'trade_type' => 'JSAPI',
-                'body' => $payment->getNumber(),
-                'detail' => $payment->getDescription(),
-                'out_trade_no' => $payment->getNumber() . mt_rand(1000, 9999),
-                'total_fee' => $payment->getTotalAmount(), 
-            ]));
+        $details = ArrayObject::ensureArrayObject(array_merge((array)$oldDetails, [
+            //'trade_type' => 'JSAPI',
+            'body' => $payment->getNumber(),
+            'detail' => $payment->getDescription(),
+            'out_trade_no' => $payment->getNumber() . mt_rand(1000, 9999),
+            'total_fee' => $payment->getTotalAmount(), 
+        ]));
 
-            $result = $this->api->doPrepare((array)$details);
-            $details['config'] = $result;
-            /* $details['status'] = 'processing'; */
-		/* } else { */
-            /* $details = $oldDetails; */
-        /* } */
+        $result = $this->api->doPrepare((array)$details);
+        $details['config'] = $result;
         $request->setResult((array) $details); //throw new \LogicException('Not implemented');
     }
 
